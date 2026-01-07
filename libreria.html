@@ -2,26 +2,27 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Equistasi – Libreria Riabilitativa</title>
+  <title>Equistasi – Ricerca Moduli</title>
   <style>
-    body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #0b0f14; }
-    .header { 
-      background: #111821; padding: 10px 20px; display: flex; 
-      justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .btn-back { 
-      color: #4da3ff; text-decoration: none; font-family: sans-serif; 
-      font-weight: bold; border: 1px solid #4da3ff; padding: 5px 15px; border-radius: 5px;
-    }
-    iframe { width: 100%; height: calc(100% - 60px); border: none; }
-    .logo img { height: 30px; background: white; padding: 5px; border-radius: 4px; }
+    body { background: #0b0f14; color: #e7eef8; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
+    .container { max-width: 600px; padding: 40px; background: #111821; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+    .btn { background: #4da3ff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; margin-top: 20px; }
+    .btn-back { color: #a8b3c3; text-decoration: none; margin-top: 20px; display: block; font-size: 14px; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <a href="index.html" class="btn-back">← TORNA ALLA SCHEDA</a>
-    <div class="logo"><img src="equistasi-logo.png" alt="Logo"></div>
+  <div class="container">
+    <img src="equistasi-logo.png" style="height:40px; margin-bottom:20px; background:white; padding:5px; border-radius:4px;">
+    <h2>Ricerca Moduli Riabilitativi</h2>
+    <p>Per motivi di sicurezza di BioDigital, la libreria completa deve essere aperta in una nuova finestra per permetterti di scegliere i movimenti corretti.</p>
+    
+    <a href="https://human.biodigital.com/results/modules?categoryId=Physical%20Therapy&type=Category" target="_blank" class="btn">APRI LIBRERIA PHYSICAL THERAPY ↗</a>
+    
+    <p style="font-size: 13px; color: #a8b3c3; margin-top: 25px;">
+      Una volta trovato il movimento, copia l'URL dalla barra degli indirizzi e aggiungilo al tuo file index.html.
+    </p>
+    
+    <a href="index.html" class="btn-back">← Torna alla scheda clinica</a>
   </div>
-  <iframe src="https://human.biodigital.com/results/modules?categoryId=Physical%20Therapy&type=Category"></iframe>
 </body>
 </html>
