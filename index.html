@@ -2,879 +2,185 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Equistasi – Clinica (Demo)</title>
-
+  <title>Equistasi – Clinica</title>
   <style>
-    :root{
-      --bg:#0b0f14; --panel:#0f1620; --panel2:#111b27;
-      --txt:#e7eef8; --muted:#a8b3c3; --border:rgba(255,255,255,.08);
-      --accent:#4da3ff; --ok:#3ddc97; --warn:#ffcc66; --danger:#ff5d5d;
-      --overlayBg: rgba(15,22,32,.88);
-      --overlayBorder: rgba(255,255,255,.10);
-    }
-    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--txt);overflow:hidden}
-    .app{display:grid;grid-template-columns:420px 1fr;height:100vh}
-
-    .left{
-      background:linear-gradient(180deg,var(--panel),var(--panel2));
-      border-right:1px solid var(--border);
-      padding:16px;
-      overflow:auto;
-    }
-    h1{font-size:18px;margin:0 0 8px}
-    .sub{color:var(--muted);font-size:12px;line-height:1.35;margin-bottom:12px}
-    .card{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.03);
-      border-radius:14px;
-      padding:12px;
-      margin:12px 0;
-    }
-    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-    .label{font-size:12px;color:var(--muted);margin:10px 0 6px}
-    input, select, textarea{
-      width:100%;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.04);
-      color:var(--txt);
-      outline:none;
-    }
-    textarea{min-height:90px;resize:vertical}
-    .btn{
-      border:1px solid rgba(77,163,255,.35);
-      background:rgba(77,163,255,.14);
-      color:var(--txt);
-      border-radius:12px;
-      padding:10px 12px;
-      cursor:pointer;
-      font-size:13px;
-      user-select:none;
-    }
-    .btn:hover{background:rgba(77,163,255,.20)}
-    .btn.secondary{border:1px solid var(--border);background:rgba(255,255,255,.06)}
-    .btn.secondary:hover{background:rgba(255,255,255,.10)}
-    .btn.danger{border:1px solid rgba(255,93,93,.35);background:rgba(255,93,93,.12)}
-    .btn.danger:hover{background:rgba(255,93,93,.18)}
-    .pill{
-      display:inline-flex;gap:8px;align-items:center;
-      padding:6px 10px;border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.25);
-      color:var(--muted);
-      font-size:12px;
-    }
-    .small{font-size:12px;color:var(--muted);line-height:1.35}
-    .right{position:relative;background:#000}
-    iframe{width:100%;height:100%;border:0;display:block;background:#000}
-
-    .topbar{
-      position:absolute;left:12px;top:12px;right:12px;
-      display:flex;gap:10px;align-items:center;z-index:10;
-      pointer-events:none;
-    }
-    .topbar .pill{pointer-events:auto}
-
-    /* ===== Overlay descrizione (sostituisce il pannello bianco interno) ===== */
-    .infoPanel{
-      position:absolute;
-      left:12px;
-      top:56px;             /* sotto la topbar */
-      z-index:12;
-      width:min(460px, calc(100vw - 24px));
-      background:var(--overlayBg);
-      border:1px solid var(--overlayBorder);
-      border-radius:14px;
-      padding:12px;
-      backdrop-filter: blur(6px);
-      pointer-events:auto;
-    }
-    .infoHead{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:10px;
-    }
-    .infoTitle{
-      font-weight:800;
-      font-size:13px;
-      margin:0;
-      line-height:1.2;
-    }
-    .infoBody{
-      font-size:12px;
-      color:var(--txt);
-      line-height:1.35;
-      max-height:220px;
-      overflow:auto;
-      border-top:1px solid var(--overlayBorder);
-      padding-top:10px;
-      white-space:pre-wrap;
-    }
-    .infoControls{
-      display:grid;
-      grid-template-columns: 1fr 150px;
-      gap:10px;
-      margin-bottom:10px;
-    }
-    .infoControls input, .infoControls select{
-      padding:9px 10px;
-      border-radius:12px;
-      border:1px solid var(--overlayBorder);
-      background:rgba(255,255,255,.04);
-      color:var(--txt);
-    }
-    .infoBtns{display:flex;gap:8px;flex-wrap:wrap}
-    .tinyBtn{
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid var(--overlayBorder);
-      background:rgba(255,255,255,.06);
-      color:var(--txt);
-      cursor:pointer;
-      font-size:12px;
-    }
-    .tinyBtn:hover{background:rgba(255,255,255,.10)}
-    .tinyBtn.primary{
-      border:1px solid rgba(77,163,255,.35);
-      background:rgba(77,163,255,.14);
-    }
-    .tinyBtn.primary:hover{background:rgba(77,163,255,.20)}
-    .sourceLink{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .sourceLink a{color:var(--accent);text-decoration:none}
-    .sourceLink a:hover{text-decoration:underline}
-
-    /* session list */
-    .sessions{
-      max-height:240px; overflow:auto;
-      border:1px solid var(--border); border-radius:14px;
-    }
-    .sessionItem{
-      padding:10px 12px; cursor:pointer;
-      border-bottom:1px solid var(--border);
-      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
-    }
-    .sessionItem:last-child{border-bottom:none}
-    .sessionItem:hover{background:rgba(255,255,255,.04)}
-    .sessionItem b{color:var(--txt)}
-    .badge{
-      font-size:11px; padding:4px 8px; border-radius:999px;
-      border:1px solid var(--border); color:var(--muted);
-      white-space:nowrap;
-    }
-    .hr{height:1px;background:var(--border);margin:10px 0}
-    .printOnly{display:none}
-
-    @media (max-width: 900px){
-      /* su mobile: puoi decidere se nascondere la scheda oppure no.
-         per ora lasciamo tutto com’è; se vuoi "solo 3D" su mobile lo facciamo dopo con 2 righe */
-      .app{grid-template-columns:420px 1fr;}
+    /* VARIABILI COLORE (Tema Scuro Professionale) */
+    :root {
+      --bg: #0b0f14; 
+      --panel: #111821; 
+      --txt: #e7eef8; 
+      --muted: #a8b3c3;
+      --accent: #4da3ff; 
+      --border: rgba(255,255,255,0.1);
+      --card-bg: rgba(255,255,255,0.03);
     }
 
-    @media print{
-      body{background:#fff;color:#000}
-      .app{display:block}
-      .right{display:none}
-      .left{border:none;background:#fff}
-      .card{border:1px solid #ddd;background:#fff}
-      .btn, .sessions, .topbar, .infoPanel{display:none !important}
-      .printOnly{display:block}
-      input,select,textarea{border:1px solid #ddd;color:#000;background:#fff}
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--txt); overflow: hidden; }
+    
+    /* LAYOUT PRINCIPALE */
+    .app { display: grid; grid-template-columns: 420px 1fr; height: 100vh; }
+    
+    /* SIDEBAR SINISTRA */
+    .sidebar { 
+      background: var(--panel); 
+      padding: 25px; 
+      border-right: 1px solid var(--border); 
+      overflow-y: auto; 
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* VIEWER 3D */
+    .viewer { position: relative; background: #000; display: flex; flex-direction: column; }
+    iframe { width: 100%; height: 100%; border: 0; }
+
+    /* COMPONENTI SCHEDA */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 15px; }
+    .label { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px; font-weight: 700; letter-spacing: 0.5px; }
+    input, select, textarea { 
+      width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); 
+      background: rgba(0,0,0,0.3); color: #fff; font-size: 14px; margin-bottom: 12px;
+    }
+
+    /* LOGO E OVERLAY */
+    .logo-overlay { position: absolute; top: 20px; right: 25px; z-index: 10; background: white; padding: 8px 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    .logo-overlay img { height: 35px; display: block; }
+    .cover-logo { position: absolute; bottom: 0; left: 0; width: 200px; height: 50px; background: #000; z-index: 5; pointer-events: none; }
+
+    /* BOTTONI */
+    .btn-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .btn { 
+      cursor: pointer; border: 1px solid var(--accent); border-radius: 6px; 
+      padding: 10px 15px; font-weight: bold; font-size: 12px; transition: 0.3s;
+    }
+    .btn-lang { background: transparent; color: var(--accent); flex: 1; }
+    .btn-lang:hover { background: var(--accent); color: white; }
+    .btn-print { background: var(--accent); color: white; width: 100%; padding: 15px; font-size: 14px; margin-top: 10px; }
+    .btn-print:hover { filter: brightness(1.1); }
+
+    /* REGOLE DI STAMPA PDF (Risolve image_c31b5f.jpg) */
+    @media print {
+      body { background: white !important; color: black !important; overflow: visible !important; }
+      .app { display: block !important; height: auto !important; }
+      .sidebar { width: 100% !important; border: none !important; padding: 0 !important; background: white !important; }
+      .viewer { 
+        width: 100% !important; height: 850px !important; 
+        page-break-before: always; position: relative !important; display: block !important; 
+      }
+      iframe { height: 100% !important; border: 1px solid #eee !important; }
+      .btn, .btn-print, .btn-row, .cover-logo, select#mapSelector { display: none !important; }
+      .card { border: 1px solid #ddd !important; background: none !important; page-break-inside: avoid; margin-bottom: 20px; }
+      input, select, textarea { border: none !important; background: none !important; color: black !important; padding: 0 !important; margin-bottom: 10px; }
+      .label { color: #555 !important; }
+      .logo-overlay { position: relative !important; top: 0 !important; right: 0 !important; margin-bottom: 30px; text-align: right; box-shadow: none; }
     }
   </style>
 </head>
-
 <body>
+
 <div class="app">
+  <aside class="sidebar">
+    <div class="btn-row">
+      <button class="btn btn-lang" onclick="changeLang('it')">ITALIANO</button>
+      <button class="btn btn-lang" onclick="changeLang('en')">ENGLISH</button>
+    </div>
 
-  <!-- PANNELLO CLINICO -->
-  <aside class="left">
-    <h1>Equistasi – Scheda clinica</h1>
-    <div class="sub">
-      Struttura rapida per: distretto → target muscoli → repere → posizionamento Equistasi → note manuali (trigger point / punti tipo agopuntura) → obiettivo.
+    <h2 id="t-title" style="margin: 5px 0 15px 0; font-size: 1.4em;">Equistasi – Scheda Clinica</h2>
+    
+    <div class="card">
+      <div class="label" id="t-patient">Paziente (ID o Nome)</div>
+      <input type="text" placeholder="Es: Milena Baroni">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
+        <div>
+          <div class="label" id="t-date">Data Visita</div>
+          <input type="date" value="2026-01-07">
+        </div>
+        <div>
+          <div class="label" id="t-side">Lato Trattamento</div>
+          <select><option>Sinistro</option><option>Destro</option><option>Bilaterale</option></select>
+        </div>
+      </div>
     </div>
 
     <div class="card">
-      <div class="row" style="justify-content:space-between">
-        <div class="pill">Salvataggio <b style="color:var(--ok)">automatico</b></div>
-        <div class="pill">Backup: Export/Import JSON</div>
-      </div>
+      <div class="label" id="t-map">Visualizzazione 3D</div>
+      <select id="mapSelector" onchange="switchMap(this.value)">
+        <option value="2b5y">Sistema Muscolare (Target)</option>
+        <option value="4VpE" selected>Mappa Dermatomeri (Corpo Intero)</option>
+        <option value="2Yv8">Muscoli della Corsa (Arto Inf.)</option>
+      </select>
+      
+      <div class="label" id="t-muscles">Muscoli Target (Principali)</div>
+      <input type="text" placeholder="Es: Trapezio, SCM...">
+      
+      <div class="label" id="t-innerv">Livello Innervazione (Radice)</div>
+      <input type="text" placeholder="Es: C2-C3, L5-S1">
     </div>
 
-    <!-- DATI PAZIENTE -->
     <div class="card">
-      <div class="row" style="justify-content:space-between;align-items:flex-end">
-        <div style="flex:1">
-          <div class="label">Paziente (ID o Nome)</div>
-          <input id="patient" placeholder="Es. Rossi Mario / ID 001" />
-        </div>
-        <div style="width:140px">
-          <div class="label">Data</div>
-          <input id="date" type="date" />
-        </div>
-      </div>
-
-      <div class="grid2">
+      <div class="label" id="t-notes">Note Manuali / Trigger Points</div>
+      <textarea rows="3" placeholder="Descrivi i punti di repere..."></textarea>
+      
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
         <div>
-          <div class="label">Distretto / Protocollo</div>
-          <select id="protocol">
-            <option value="cervicale">Cervicale / cefalea tensiva</option>
-            <option value="spalla">Spalla (dolore / controllo scapolare)</option>
-            <option value="dorsale">Dorsale / scapolo-toracico</option>
-            <option value="lombare">Lombare (stabilità / dolore)</option>
-            <option value="anca">Anca (controllo / catena post.)</option>
-            <option value="ginocchio">Ginocchio (carico / catena estensoria)</option>
-            <option value="caviglia">Caviglia / piede (propriocezione)</option>
-          </select>
+          <div class="label" id="t-dev">Dispositivi</div>
+          <select><option>1</option><option selected>2</option><option>3</option></select>
         </div>
         <div>
-          <div class="label">Lato</div>
-          <select id="side">
-            <option value="bilaterale">Bilaterale</option>
-            <option value="destro">Destro</option>
-            <option value="sinistro">Sinistro</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid2">
-        <div>
-          <div class="label">Obiettivo clinico</div>
-          <select id="goal">
-            <option value="stabilita">Stabilità / controllo posturale</option>
-            <option value="dolore">Riduzione dolore / modulazione tono</option>
-            <option value="controllo">Controllo motorio fine / coordinazione</option>
-            <option value="carico">Ritorno al carico / simmetria</option>
-            <option value="equilibrio">Equilibrio / reattività</option>
-          </select>
-        </div>
-        <div>
-          <div class="label">Esito (oggi)</div>
-          <select id="outcome">
-            <option value="migliora">Migliora</option>
-            <option value="stabile">Stabile</option>
-            <option value="peggiora">Peggiora</option>
-          </select>
+          <div class="label" id="t-dur">Durata (min)</div>
+          <input type="number" value="2">
         </div>
       </div>
     </div>
 
-    <!-- TARGET ANATOMICI -->
-    <div class="card">
-      <div class="label">Muscoli target (principali)</div>
-      <input id="muscles" placeholder="Es. trapezio sup., SCM, suboccipitali, elevatore scapola..." />
-
-      <div class="grid2">
-        <div>
-          <div class="label">Innervazione (radici/nervo)</div>
-          <input id="innervation" placeholder="Es. C2–C4 / accessorio / C5–C6..." />
-        </div>
-        <div>
-          <div class="label">Origine / Inserzione (sintesi)</div>
-          <input id="oi" placeholder="Es. nuca → clavicola; scapola → omero..." />
-        </div>
-      </div>
-
-      <div class="grid2">
-        <div>
-          <div class="label">Trigger point (mappa rapida)</div>
-          <textarea id="triggers" placeholder="Es. TP trapezio sup (angolo collo-spalla), TP SCM, TP infraspinato..."></textarea>
-        </div>
-        <div>
-          <div class="label">Punti tipo agopuntura / repere</div>
-          <textarea id="acupoints" placeholder="Es. repere su processo spinoso C7, bordo mediale scapola, cresta iliaca..."></textarea>
-        </div>
-      </div>
-
-      <div class="label">Note manuali (solo manuale + Equistasi)</div>
-      <textarea id="manual" placeholder="Es. rilascio mirato su trigger point, normalizzazione catena miofasciale, controllo respiratorio e centratura..."></textarea>
-    </div>
-
-    <!-- POSIZIONAMENTO EQUISTASI -->
-    <div class="card">
-      <div class="row" style="justify-content:space-between">
-        <div style="font-weight:700">Posizionamento Equistasi</div>
-        <div class="pill">Repere → precisione</div>
-      </div>
-
-      <div class="grid3">
-        <div>
-          <div class="label">N° dispositivi</div>
-          <select id="nDevices">
-            <option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option>
-          </select>
-        </div>
-        <div>
-          <div class="label">Schema</div>
-          <select id="scheme">
-            <option value="stabilizzante">Stabilizzante</option>
-            <option value="riequilibrio">Riequilibrio</option>
-            <option value="propriocettivo">Propriocettivo</option>
-            <option value="antalgico">Antalgico / tono</option>
-          </select>
-        </div>
-        <div>
-          <div class="label">Durata (min)</div>
-          <input id="minutes" type="number" min="1" max="120" value="20" />
-        </div>
-      </div>
-
-      <div class="label">Repere anatomici e punti di applicazione (descrivi posizione)</div>
-      <textarea id="placement" placeholder="Esempio: 1) paravertebrale C7–T1 (2 cm lateralmente), 2) margine mediale scapola, 3) sovraspinato fossa, 4) deltoide post..."></textarea>
-
-      <div class="grid2">
-        <div>
-          <div class="label">Check rapido prima/dopo</div>
-          <textarea id="check" placeholder="Es. ROM, dolore (0–10), test equilibrio, controllo scapolare..."></textarea>
-        </div>
-        <div>
-          <div class="label">Note sessione</div>
-          <textarea id="notes" placeholder="Osservazioni: risposta immediata, adattamento, indicazioni domicilio..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- SESSIONI -->
-    <div class="card">
-      <div class="row" style="justify-content:space-between">
-        <div style="font-weight:700">Sessioni salvate</div>
-        <div class="row">
-          <button class="btn secondary" id="btnExport">Export JSON</button>
-          <button class="btn secondary" id="btnImport">Import JSON</button>
-          <button class="btn" id="btnSaveSession">Salva sessione</button>
-        </div>
-      </div>
-
-      <div class="small" style="margin-top:8px">
-        Clicca una sessione per ricaricarla. “Elimina” rimuove solo dal browser.
-      </div>
-
-      <div style="height:10px"></div>
-      <div class="sessions" id="sessionList"></div>
-
-      <div class="hr"></div>
-
-      <div class="row">
-        <button class="btn secondary" id="btnPrint">Stampa</button>
-        <button class="btn danger" id="btnClearAll">Cancella tutto</button>
-        <button class="btn secondary" id="btnCopyViewer">Copia URL viewer</button>
-      </div>
-
-      <div class="small" style="margin-top:10px">
-        Suggerimento: fai Export JSON 1 volta a settimana come backup.
-      </div>
-    </div>
-
-    <div class="printOnly">
-      <h2>Equistasi – Scheda clinica (stampa)</h2>
-      <div class="small">Questa stampa include solo la parte clinica (il viewer 3D non viene stampato).</div>
-    </div>
+    <button class="btn btn-print" onclick="window.print()" id="t-print">GENERA PDF SCHEDA</button>
   </aside>
 
-  <!-- VIEWER 3D -->
-  <main class="right">
-    <div class="topbar">
-      <div class="pill"><b style="color:var(--txt)">3D</b> BioDigital</div>
-      <div class="pill">Ruota: trascina • Zoom: rotella • Strumenti: toolbar</div>
-    </div>
-
-    <!-- PANNELLO DESCRIZIONE IT/EN (overlay) -->
-    <section class="infoPanel" aria-label="Descrizione struttura">
-      <div class="infoHead">
-        <div>
-          <div class="pill">Descrizione struttura</div>
-        </div>
-
-        <div style="display:flex;gap:8px;align-items:center">
-          <select id="langSel" title="Lingua" style="width:150px">
-            <option value="it">Italiano</option>
-            <option value="en">English</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="infoControls">
-        <input id="structName" placeholder="Es. Left trapezius (oppure: trapezio sinistro)" />
-        <select id="planSel" title="Sorgente descrizione">
-          <option value="wiki" selected>Wiki</option>
-          <option value="pro">Pro</option>
-        </select>
-      </div>
-
-      <div class="infoBtns">
-        <button class="tinyBtn primary" id="btnSearchDesc">Cerca descrizione</button>
-        <button class="tinyBtn" id="btnUseTarget">Usa 1° muscolo target</button>
-        <button class="tinyBtn" id="btnClearDesc">Pulisci</button>
-      </div>
-
-      <div style="height:10px"></div>
-
-      <div class="infoTitle" id="descTitle">—</div>
-      <div class="infoBody" id="descBody">Inserisci un nome (es. “Left trapezius”) e premi “Cerca descrizione”.</div>
-
-      <div class="sourceLink" id="descSource" style="display:none">
-        <span>Fonte</span>
-        <a id="descLink" href="#" target="_blank" rel="noopener">Apri</a>
-      </div>
-    </section>
-
-    <!-- IMPORTANTE: ui-info=false per togliere la “pagina bianca” inglese -->
-    <iframe
-      title="BioDigital – Sistema muscolo-scheletrico completo"
-      src="https://human.biodigital.com/widget/?be=2b5y&background.colors=0,0,0,1,0,0,0,1&initial.hand-hint=true&ui-info=false&ui-fullscreen=true&ui-center=false&ui-dissect=true&ui-zoom=true&ui-help=true&ui-tools-display=primary&uaid=3Yfre"
-      allow="fullscreen"
-    ></iframe>
+  <main class="viewer">
+    <div class="logo-overlay"><img src="equistasi-logo.png" alt="Logo"></div>
+    <div class="cover-logo"></div>
+    <iframe id="bioframe" src="https://human.biodigital.com/widget/?be=4VpE&background.colors=0,0,0,1,0,0,0,1&ui-info=true&ui-fullscreen=true&ui-dissect=true&ui-zoom=true&ui-tools-display=primary&uaid=3Yfre&lang=it"></iframe>
   </main>
-
 </div>
 
 <script>
-  // ====== Viewer URL (invariato, solo ui-info=false) ======
-  const BIODIGITAL_URL =
-    "https://human.biodigital.com/widget/?be=2b5y&background.colors=0,0,0,1,0,0,0,1&initial.hand-hint=true&ui-info=false&ui-fullscreen=true&ui-center=false&ui-dissect=true&ui-zoom=true&ui-help=true&ui-tools-display=primary&uaid=3Yfre";
+  // SISTEMA DI TRADUZIONE INTEGRATO (Rimuove loghi Google)
+  const translations = {
+    it: { title: "Equistasi – Scheda Clinica", patient: "Paziente (ID o Nome)", date: "Data Visita", side: "Lato Trattamento", map: "Visualizzazione 3D", muscles: "Muscoli Target (Principali)", innerv: "Livello Innervazione (Radice)", notes: "Note Manuali / Trigger Points", dev: "Dispositivi", dur: "Durata (min)", print: "GENERA PDF SCHEDA" },
+    en: { title: "Equistasi – Clinical Sheet", patient: "Patient (ID or Name)", date: "Visit Date", side: "Treatment Side", map: "3D Visualization", muscles: "Target Muscles (Primary)", innerv: "Innervation Level (Root)", notes: "Manual Notes / Trigger Points", dev: "Devices", dur: "Duration (min)", print: "GENERA PDF SHEET" }
+  };
 
-  // ====== Form ======
-  const FORM_KEYS = [
-    "patient","date","protocol","side","goal","outcome",
-    "muscles","innervation","oi","triggers","acupoints","manual",
-    "nDevices","scheme","minutes","placement","check","notes"
-  ];
-
-  const LS_FORM = "equistasi_form_v1";
-  const LS_SESSIONS = "equistasi_sessions_v1";
-
-  function $(id){ return document.getElementById(id); }
-
-  function loadForm(){
-    const data = JSON.parse(localStorage.getItem(LS_FORM) || "{}");
-    FORM_KEYS.forEach(k=>{
-      if($(k) && data[k] !== undefined) $(k).value = data[k];
-    });
-
-    if(!$("date").value){
-      const iso = new Date().toISOString().slice(0,10);
-      $("date").value = iso;
-    }
+  function changeLang(lang) {
+    const t = translations[lang];
+    document.getElementById('t-title').innerText = t.title;
+    document.getElementById('t-patient').innerText = t.patient;
+    document.getElementById('t-date').innerText = t.date;
+    document.getElementById('t-side').innerText = t.side;
+    document.getElementById('t-map').innerText = t.map;
+    document.getElementById('t-muscles').innerText = t.muscles;
+    document.getElementById('t-innerv').innerText = t.innerv;
+    document.getElementById('t-notes').innerText = t.notes;
+    document.getElementById('t-dev').innerText = t.dev;
+    document.getElementById('t-dur').innerText = t.dur;
+    document.getElementById('t-print').innerText = t.print;
+    
+    // Aggiorna lingua dell'iframe 3D
+    const frame = document.getElementById('bioframe');
+    const url = new URL(frame.src);
+    url.searchParams.set('lang', lang);
+    frame.src = url.toString();
   }
 
-  function saveForm(){
-    const data = {};
-    FORM_KEYS.forEach(k=> data[k] = $(k)?.value ?? "");
-    localStorage.setItem(LS_FORM, JSON.stringify(data));
+  // FUNZIONE CAMBIO MAPPA
+  function switchMap(modelId) {
+    const frame = document.getElementById('bioframe');
+    const baseUrl = "https://human.biodigital.com/widget/?be=";
+    const settings = "&background.colors=0,0,0,1,0,0,0,1&ui-info=true&ui-fullscreen=true&ui-dissect=true&ui-zoom=true&ui-tools-display=primary&uaid=3Yfre&lang=it";
+    frame.src = baseUrl + modelId + settings;
   }
-
-  function getSessions(){
-    return JSON.parse(localStorage.getItem(LS_SESSIONS) || "[]");
-  }
-  function setSessions(list){
-    localStorage.setItem(LS_SESSIONS, JSON.stringify(list));
-  }
-
-  function labelProtocol(val){
-    const map = {
-      cervicale:"Cervicale / cefalea tensiva",
-      spalla:"Spalla (dolore / controllo scapolare)",
-      dorsale:"Dorsale / scapolo-toracico",
-      lombare:"Lombare (stabilità / dolore)",
-      anca:"Anca (controllo / catena post.)",
-      ginocchio:"Ginocchio (carico / catena estensoria)",
-      caviglia:"Caviglia / piede (propriocezione)"
-    };
-    return map[val] || val || "";
-  }
-
-  function newId(){
-    return "S" + Math.random().toString(16).slice(2) + Date.now().toString(16);
-  }
-
-  function renderSessions(){
-    const list = getSessions();
-    const box = $("sessionList");
-    box.innerHTML = "";
-
-    if(list.length === 0){
-      box.innerHTML = `<div class="small" style="padding:10px 12px">Nessuna sessione salvata.</div>`;
-      return;
-    }
-
-    list
-      .sort((a,b)=> (b.createdAt||0) - (a.createdAt||0))
-      .forEach(s=>{
-        const div = document.createElement("div");
-        div.className = "sessionItem";
-        div.innerHTML = `
-          <div style="min-width:0">
-            <div><b>${escapeHtml(s.patient || "—")}</b> <span class="badge">${escapeHtml(s.date || "")}</span></div>
-            <div class="small" style="margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
-              ${escapeHtml(labelProtocol(s.protocol))} • ${escapeHtml(s.side || "")} • ${escapeHtml(s.goal || "")}
-            </div>
-          </div>
-          <div class="row" style="gap:6px;flex-wrap:nowrap">
-            <span class="badge">${escapeHtml(s.outcome || "")}</span>
-            <button class="btn secondary" data-action="load" data-id="${s.id}" style="padding:8px 10px">Apri</button>
-            <button class="btn danger" data-action="del" data-id="${s.id}" style="padding:8px 10px">Elimina</button>
-          </div>
-        `;
-        box.appendChild(div);
-      });
-
-    box.querySelectorAll("button[data-action]").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        const action = btn.getAttribute("data-action");
-        const id = btn.getAttribute("data-id");
-        if(action === "load") loadSession(id);
-        if(action === "del") deleteSession(id);
-      });
-    });
-  }
-
-  function saveSession(){
-    const data = {};
-    FORM_KEYS.forEach(k=> data[k] = $(k)?.value ?? "");
-    data.id = newId();
-    data.createdAt = Date.now();
-
-    const list = getSessions();
-    list.push(data);
-    setSessions(list);
-    renderSessions();
-    alert("Sessione salvata.");
-  }
-
-  function loadSession(id){
-    const list = getSessions();
-    const s = list.find(x=>x.id===id);
-    if(!s) return;
-
-    FORM_KEYS.forEach(k=>{
-      if($(k) && s[k] !== undefined) $(k).value = s[k];
-    });
-
-    saveForm();
-    alert("Sessione caricata.");
-  }
-
-  function deleteSession(id){
-    if(!confirm("Eliminare questa sessione dal browser?")) return;
-    const list = getSessions().filter(x=>x.id!==id);
-    setSessions(list);
-    renderSessions();
-  }
-
-  function clearAll(){
-    if(!confirm("Cancellare TUTTO (form + sessioni) da questo browser?")) return;
-    localStorage.removeItem(LS_FORM);
-    localStorage.removeItem(LS_SESSIONS);
-    FORM_KEYS.forEach(k=> { if($(k)) $(k).value = ""; });
-    loadForm();
-    renderSessions();
-    alert("Cancellato.");
-  }
-
-  function exportJson(){
-    const payload = {
-      exportedAt: new Date().toISOString(),
-      form: JSON.parse(localStorage.getItem(LS_FORM) || "{}"),
-      sessions: getSessions()
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "equistasi_backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function importJson(){
-    const inp = document.createElement("input");
-    inp.type = "file";
-    inp.accept = "application/json";
-    inp.onchange = () => {
-      const file = inp.files?.[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try{
-          const obj = JSON.parse(reader.result);
-          if(obj.form) localStorage.setItem(LS_FORM, JSON.stringify(obj.form));
-          if(Array.isArray(obj.sessions)) localStorage.setItem(LS_SESSIONS, JSON.stringify(obj.sessions));
-          loadForm();
-          renderSessions();
-          alert("Import completato.");
-        }catch(e){
-          alert("File non valido.");
-        }
-      };
-      reader.readAsText(file);
-    };
-    inp.click();
-  }
-
-  function copyViewer(){
-    navigator.clipboard.writeText(BIODIGITAL_URL).then(
-      ()=>alert("URL viewer copiato!"),
-      ()=>prompt("Copia manualmente:", BIODIGITAL_URL)
-    );
-  }
-
-  function escapeHtml(s){
-    return String(s ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  // ====== Lingua + descrizioni (BioDigital + Google Translate) ======
-  const LS_LANG = "equistasi_desc_lang_v1";
-  const LS_DESC_CACHE = "equistasi_desc_cache_v1"; // cache semplice in localStorage
-
-  function getCache(){
-    try{ return JSON.parse(localStorage.getItem(LS_DESC_CACHE) || "{}"); }
-    catch{ return {}; }
-  }
-  function setCache(obj){
-    localStorage.setItem(LS_DESC_CACHE, JSON.stringify(obj));
-  }
-
-  function setDescUI({title, body, link}){
-    $("descTitle").textContent = title || "—";
-    $("descBody").textContent = body || "—";
-    const box = $("descSource");
-    const a = $("descLink");
-    if(link){
-      box.style.display = "flex";
-      a.href = link;
-    }else{
-      box.style.display = "none";
-      a.href = "#";
-    }
-  }
-
-  async function googleTranslate(text, sl, tl){
-    // endpoint "gtx" (senza chiavi). Se Google cambia policy in futuro, basterà sostituire questa funzione.
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}&dt=t&q=${encodeURIComponent(text)}`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error("Translate failed");
-    const data = await res.json();
-    // data[0] = array di segmenti tradotti
-    return (data?.[0] || []).map(x=>x?.[0] || "").join("");
-  }
-
-  function makeDescUrl(name, plan, ol){
-    // ol = output language (en). plan: wiki/pro
-    return `https://human.biodigital.com/search/descriptions?name=${encodeURIComponent(name)}&plan=${encodeURIComponent(plan)}&ol=${encodeURIComponent(ol)}`;
-  }
-
-  function pickFirstResult(json){
-    // Struttura JSON non documentata pubblicamente: gestiamo più casi.
-    // Proviamo diverse chiavi tipiche.
-    if(!json) return null;
-
-    if(Array.isArray(json.results) && json.results[0]) return json.results[0];
-    if(Array.isArray(json.hits) && json.hits[0]) return json.hits[0];
-    if(Array.isArray(json.items) && json.items[0]) return json.items[0];
-
-    // a volte può essere oggetto singolo
-    if(json.title || json.name || json.description) return json;
-
-    return null;
-  }
-
-  function normalizeText(x){
-    return String(x || "").replace(/\s+/g," ").trim();
-  }
-
-  function extractTitleAndBody(item){
-    // cerchiamo campi probabili
-    const title =
-      item.title || item.name || item.term || item.query || "";
-
-    const body =
-      item.description || item.text || item.summary || item.content || "";
-
-    return { title: normalizeText(title), body: normalizeText(body) };
-  }
-
-  async function fetchDescriptionByName(name, plan){
-    const url = makeDescUrl(name, plan, "en");
-    const res = await fetch(url);
-    if(!res.ok) throw new Error("BioDigital description request failed");
-    const json = await res.json();
-    const first = pickFirstResult(json);
-    if(!first) return null;
-    const {title, body} = extractTitleAndBody(first);
-    if(!title && !body) return null;
-
-    // link fonte: se BioDigital non lo fornisce, almeno lasciamo l’URL della query
-    const link = first.url || first.link || url;
-    return { title, body, link };
-  }
-
-  async function getDescriptionSmart(inputName, plan){
-    const name = normalizeText(inputName);
-    if(!name) return null;
-
-    // cache: chiave = name|plan
-    const cacheKey = `${name}__${plan}`;
-    const cache = getCache();
-    if(cache[cacheKey]) return cache[cacheKey];
-
-    // 1) prova diretto
-    let out = await fetchDescriptionByName(name, plan);
-
-    // 2) se non trova, prova a tradurre IT->EN e riprova
-    if(!out){
-      try{
-        const en = await googleTranslate(name, "it", "en");
-        if(en && en.toLowerCase() !== name.toLowerCase()){
-          out = await fetchDescriptionByName(en, plan);
-          if(out){
-            out._queryWas = en;
-          }
-        }
-      }catch(_){}
-    }
-
-    if(out){
-      cache[cacheKey] = out;
-      setCache(cache);
-    }
-    return out;
-  }
-
-  async function translateIfNeeded(desc, uiLang){
-    if(!desc) return null;
-    if(uiLang === "en") return desc;
-
-    // cache traduzione: chiave su title+body
-    const cache = getCache();
-    const tKey = `T__it__${desc.title}__${desc.body}`.slice(0, 500); // limitiamo lunghezza chiave
-    if(cache[tKey]) return cache[tKey];
-
-    const titleIt = desc.title ? await googleTranslate(desc.title, "en", "it") : "";
-    const bodyIt  = desc.body  ? await googleTranslate(desc.body, "en", "it")  : "";
-
-    const translated = { title: titleIt || desc.title, body: bodyIt || desc.body, link: desc.link };
-    cache[tKey] = translated;
-    setCache(cache);
-    return translated;
-  }
-
-  async function runSearch(){
-    const uiLang = $("langSel").value;
-    const plan = $("planSel").value;
-    const name = $("structName").value;
-
-    setDescUI({ title:"Ricerca…", body:"Sto cercando la descrizione e traducendo se necessario…", link:null });
-
-    try{
-      const base = await getDescriptionSmart(name, plan);
-      if(!base){
-        setDescUI({
-          title:"Nessun risultato",
-          body:"Non ho trovato una descrizione. Prova a scrivere il nome in inglese come nel viewer (es. “Left trapezius”).",
-          link:null
-        });
-        return;
-      }
-      const finalDesc = await translateIfNeeded(base, uiLang);
-      setDescUI({
-        title: finalDesc.title || base.title || "—",
-        body: finalDesc.body || base.body || "—",
-        link: base.link || null
-      });
-    }catch(e){
-      setDescUI({
-        title:"Errore",
-        body:"Non riesco a recuperare la descrizione in questo momento. Apri la console (F12) per dettagli.",
-        link:null
-      });
-      console.error(e);
-    }
-  }
-
-  function useFirstTarget(){
-    const raw = $("muscles").value || "";
-    const first = raw.split(",")[0].trim();
-    if(!first){
-      alert("Inserisci almeno un muscolo in “Muscoli target (principali)”.");
-      return;
-    }
-    $("structName").value = first;
-    runSearch();
-  }
-
-  function clearDesc(){
-    $("structName").value = "";
-    setDescUI({ title:"—", body:"Inserisci un nome (es. “Left trapezius”) e premi “Cerca descrizione”.", link:null });
-  }
-
-  // ====== Autosave ======
-  FORM_KEYS.forEach(k=>{
-    const el = $(k);
-    if(!el) return;
-    el.addEventListener("input", saveForm);
-    el.addEventListener("change", saveForm);
-  });
-
-  // ====== Buttons form ======
-  $("btnSaveSession").addEventListener("click", saveSession);
-  $("btnClearAll").addEventListener("click", clearAll);
-  $("btnExport").addEventListener("click", exportJson);
-  $("btnImport").addEventListener("click", importJson);
-  $("btnCopyViewer").addEventListener("click", copyViewer);
-  $("btnPrint").addEventListener("click", ()=>window.print());
-
-  // ====== Buttons descrizione ======
-  $("btnSearchDesc").addEventListener("click", runSearch);
-  $("btnUseTarget").addEventListener("click", useFirstTarget);
-  $("btnClearDesc").addEventListener("click", clearDesc);
-
-  $("structName").addEventListener("keydown", (e)=>{
-    if(e.key === "Enter"){ e.preventDefault(); runSearch(); }
-  });
-
-  // ====== lingua persistente ======
-  function loadLang(){
-    const saved = localStorage.getItem(LS_LANG);
-    if(saved === "it" || saved === "en") $("langSel").value = saved;
-  }
-  function saveLang(){
-    localStorage.setItem(LS_LANG, $("langSel").value);
-  }
-  $("langSel").addEventListener("change", ()=>{
-    saveLang();
-    // se c’è già una descrizione, ritrasforma
-    const titleNow = $("descTitle").textContent || "";
-    const bodyNow = $("descBody").textContent || "";
-    if(titleNow && titleNow !== "—" && bodyNow && !bodyNow.startsWith("Inserisci")){
-      // rilancio la ricerca per riallineare (EN/IT)
-      if($("structName").value.trim()) runSearch();
-    }
-  });
-
-  // ====== Init ======
-  loadForm();
-  renderSessions();
-  loadLang();
 </script>
+
 </body>
 </html>
