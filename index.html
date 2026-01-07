@@ -2,52 +2,59 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Equistasi – Clinica & Dermatomeri</title>
+  <title>Equistasi Clinica – Sistema Integrato</title>
   <style>
     :root {
       --bg: #0b0f14; --panel: #111821; --txt: #e7eef8; --muted: #a8b3c3;
       --accent: #4da3ff; --border: rgba(255,255,255,0.1);
     }
-
-    * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
     html, body { height: 100%; margin: 0; background: var(--bg); color: var(--txt); overflow: hidden; }
     
     .app { display: grid; grid-template-columns: 420px 1fr; height: 100vh; }
     
+    /* SIDEBAR */
     .sidebar { background: var(--panel); padding: 20px; border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    
+    /* VIEWER */
     .viewer { position: relative; background: #000; }
     iframe { width: 100%; height: 100%; border: 0; }
 
+    /* CARDS & INPUTS */
     .card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 15px; }
-    .label { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; font-weight: bold; }
-    input, select, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: #fff; font-size: 13px; margin-bottom: 10px; }
+    .label { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; font-weight: bold; letter-spacing: 0.5px; }
+    input, select, textarea { 
+      width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border); 
+      background: rgba(0,0,0,0.3); color: #fff; font-size: 14px; margin-bottom: 10px;
+    }
 
-    .btn { cursor: pointer; border: 1px solid var(--accent); border-radius: 6px; padding: 10px; font-weight: bold; transition: 0.3s; text-align: center; }
-    .btn-info { background: rgba(77,163,255,0.1); color: var(--accent); margin-bottom: 10px; font-size: 12px; width: 100%; display: block; text-decoration: none; }
-    .btn-print { background: var(--accent); color: white; width: 100%; margin-top: 10px; }
+    /* BOTTONI */
+    .btn { cursor: pointer; border: 1px solid var(--accent); border-radius: 6px; padding: 12px; font-weight: bold; transition: 0.3s; text-align: center; text-decoration: none; font-size: 12px; }
+    .btn-info { background: rgba(77,163,255,0.1); color: var(--accent); display: block; }
+    .btn-search { background: rgba(77,163,255,0.25); color: #fff; border-color: #4da3ff; display: block; margin-top: 5px; }
+    .btn-print { background: var(--accent); color: white; width: 100%; margin-top: 10px; font-size: 14px; }
+    .btn:hover { filter: brightness(1.2); }
 
-    .logo-overlay { position: absolute; top: 15px; right: 20px; z-index: 10; background: white; padding: 5px 12px; border-radius: 6px; }
-    .logo-overlay img { height: 30px; }
+    /* LOGO OVERLAY */
+    .logo-overlay { position: absolute; top: 15px; right: 20px; z-index: 10; background: white; padding: 6px 12px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .logo-overlay img { height: 30px; display: block; }
     .cover-logo { position: absolute; bottom: 0; left: 0; width: 220px; height: 60px; background: #000; z-index: 5; pointer-events: none; }
 
-    /* MODAL STYLES */
+    /* MODAL */
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow-y: auto; }
-    .modal-content { background: #1a222d; margin: 2% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 1100px; color: #fff; line-height: 1.6; }
+    .modal-content { background: #1a222d; margin: 2% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 1100px; color: #fff; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
     .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-    .derma-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
-    .derma-img { width: 100%; border-radius: 10px; background: white; padding: 5px; object-fit: contain; }
-    
-    h3, h4 { color: var(--accent); margin-top: 20px; }
-    .info-text { font-size: 14px; color: #d1d9e6; text-align: justify; }
+    .derma-img { width: 100%; border-radius: 10px; background: white; margin-top: 20px; padding: 5px; }
 
+    /* STAMPA PDF */
     @media print {
-      .modal, .btn, .btn-info, .cover-logo, #mapSelector { display: none !important; }
+      .modal, .btn, .cover-logo, #mapSelector, .logo-overlay { display: none !important; }
       .app { display: block !important; height: auto !important; }
-      .sidebar { width: 100% !important; background: white !important; color: black !important; padding: 0 !important; }
-      .viewer { width: 100% !important; height: 850px !important; page-break-before: always; }
-      .card { border: 1px solid #ccc !important; background: none !important; color: black !important; }
+      .sidebar { width: 100% !important; background: white !important; color: black !important; padding: 0 !important; border: none !important; }
+      .viewer { width: 100% !important; height: 800px !important; page-break-before: always; display: block !important; }
+      .card { border: 1px solid #ddd !important; background: none !important; color: black !important; margin-bottom: 20px; page-break-inside: avoid; }
       input, textarea, select { color: black !important; border: none !important; background: none !important; padding: 0 !important; }
-      .label { color: #555 !important; }
+      .label { color: #555 !important; border-bottom: 1px solid #eee; margin-bottom: 8px; }
     }
   </style>
 </head>
@@ -55,80 +62,77 @@
 
 <div class="app">
   <aside class="sidebar">
-    <h2 style="margin:0 0 10px 0; font-size:18px;">Equistasi Clinica</h2>
+    <h2 style="margin:0 0 5px 0; color: var(--accent);">Equistasi Clinica</h2>
+    <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;">Protocollo Vibrazione Meccano-Terapeutica</p>
     
-    <button class="btn btn-info" onclick="openModal()">📖 APRI GUIDA DERMATOMERI</button>
+    <button class="btn btn-info" onclick="document.getElementById('dermaModal').style.display='block'">📖 MAPPA DERMATOMERI</button>
+    <a href="libreria.html" class="btn btn-search">🔍 CERCA NUOVI MOVIMENTI</a>
 
     <div class="card">
       <div class="label">Paziente</div>
-      <input type="text" placeholder="Nome o ID">
-      <div class="label">Protocollo / Vista 3D</div>
-      <select id="mapSelector" onchange="document.getElementById('bioframe').src = 'https://human.biodigital.com/widget/?be=' + this.value + '&background.colors=0,0,0,1,0,0,0,1&ui-info=true&uaid=3Yfre&lang=it'">
-        <option value="2b5y">Anatomia Muscolare (Completa)</option>
-        <option value="2Yv8">Muscoli della Corsa</option>
+      <input type="text" placeholder="Nome Cognome / ID">
+      
+      <div class="label">Seleziona Modulo 3D</div>
+      <select id="mapSelector" onchange="document.getElementById('bioframe').src = this.value">
+        <optgroup label="Movimenti Dinamici">
+          <option value="https://human.biodigital.com/widget/?be=production/maleAdult/abdominal_anterior_flexion_extension&lang=it">Flessione/Estensione Addome</option>
+        </optgroup>
+        <optgroup label="Anatomia Statica">
+          <option value="https://human.biodigital.com/widget/?be=4Oq0&ui-info=true&ui-fullscreen=true&ui-dissect=true&ui-zoom=true&ui-tools-display=primary&uaid=3Yfre&lang=it">Muscoli della Corsa (Corretto)</option>
+          <option value="https://human.biodigital.com/widget/?be=2b5y&ui-info=true&uaid=3Yfre&lang=it">Anatomia Totale Muscolare</option>
+        </optgroup>
       </select>
     </div>
 
     <div class="card">
-      <div class="label">Muscoli Target</div>
-      <input type="text" placeholder="Es. Trapezio, SCM, Tibiale">
-      <div class="label">Livello Innervazione</div>
-      <input type="text" placeholder="Es. C6, L4-L5">
-      <div class="label">Note / Trigger Points</div>
-      <textarea rows="4" placeholder="Descrizione clinica..."></textarea>
+      <div class="label">Inquadramento Clinico</div>
+      <input type="text" placeholder="Muscoli Target (es. Retto Addominale)">
+      <input type="text" placeholder="Radice Spinale / Dermatomero (es. T10)">
+      <textarea rows="4" placeholder="Note su trigger points, sintomi (dolore/formicolio) e obiettivi del trattamento..."></textarea>
     </div>
 
     <div class="card">
-      <div class="label">Posizionamento Equistasi</div>
+      <div class="label">Parametri Equistasi</div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-        <div><div class="label">N. Dispositivi</div><select><option>1</option><option selected>2</option><option>3</option></select></div>
-        <div><div class="label">Durata (min)</div><input type="number" value="2"></div>
+        <div>
+          <div class="label">Dispositivi</div>
+          <select><option>1</option><option selected>2</option><option>3</option></select>
+        </div>
+        <div>
+          <div class="label">Durata (min)</div>
+          <input type="number" value="2">
+        </div>
       </div>
     </div>
 
-    <button class="btn btn-print" onclick="window.print()">GENERA PDF SCHEDA</button>
+    <button class="btn btn-print" onclick="window.print()">GENERA REPORT PDF</button>
   </aside>
 
   <main class="viewer">
     <div class="logo-overlay"><img src="equistasi-logo.png" alt="Equistasi"></div>
     <div class="cover-logo"></div>
-    <iframe id="bioframe" src="https://human.biodigital.com/widget/?be=2b5y&background.colors=0,0,0,1,0,0,0,1&ui-info=true&uaid=3Yfre&lang=it"></iframe>
+    <iframe id="bioframe" src="https://human.biodigital.com/widget/?be=production/maleAdult/abdominal_anterior_flexion_extension&lang=it"></iframe>
   </main>
 </div>
 
 <div id="dermaModal" class="modal">
   <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h3>Schema dei Dermatomeri e Applicazione Equistasi</h3>
-    <p class="info-text">
-      Conoscere i dermatomeri aiuta a capire da quali nervi provengono i sintomi (dolore o formicolio) e consente di modulare con precisione l’attività neuromuscolare attraverso la vibrazione dell’Equistasi.
+    <span class="close" onclick="this.parentElement.parentElement.style.display='none'">&times;</span>
+    <h3 style="color: var(--accent); margin-top:0;">Mappa Dermatomeri Sensitivi</h3>
+    <p style="font-size:14px; color:#d1d9e6; line-height: 1.5;">
+      La conoscenza dei dermatomeri consente di modulare con precisione l’attività neuromuscolare. 
+      Individua la zona del sintomo per scegliere il muscolo target e il punto di applicazione Equistasi.
     </p>
-    
-    <div class="derma-grid">
-      <div class="info-text">
-        <h4>Distribuzione per Area</h4>
-        <ul style="padding-left:15px">
-          <li><strong>Cervicale:</strong> Innervano testa e arti superiori. C2–C3 (testa/mandibola); C5–C6 (parte radiale braccio/pollice); C6–C8 (bordo ulnare/ultime dita). Applicare su punti C3-C4 per modulare il trapezio superiore.</li>
-          <li><strong>Toracico:</strong> Disposti ad anelli sul tronco. T4 (capezzoli); T10 (ombelico). Utile per trattare il retto dell’addome o il diaframma (C3-C5) per migliorare propriocezione e stabilità.</li>
-          <li><strong>Lombare:</strong> Innervano fianchi e gambe. L2–L3 (ileopsoas/inguine); L3–L4 (quadricipite/rotula); L4–L5 (tibiale anteriore/alluce).</li>
-          <li><strong>Sacrale:</strong> S1–S2 (glutei/parte post. coscia). Fondamentale per trattare piriforme e gluteo medio, riducendo la sensibilizzazione del nervo sciatico.</li>
-        </ul>
-        <h4>Integrazione Clinica</h4>
-        <p>Identifica il dermatoma corrispondente: se un paziente lamenta parestesie in zona C6, i muscoli innervati (bicipite, pronatore) sono coinvolti. Collocare l'Equistasi sul ventre muscolare o trigger point modula i fusi neuromuscolari.</p>
-      </div>
-      <div>
-        <div class="label" style="text-align:center">Mappa Dermatomeri Sensitivi</div>
-        <img src="dermatomeri-sensitivi.png" class="derma-img" alt="Mappa Dermatomeri Sensitivi">
-      </div>
-    </div>
+    <img src="dermatomeri-sensitivi.png" class="derma-img" alt="Mappa Dermatomeri">
   </div>
 </div>
 
 <script>
-  function openModal() { document.getElementById("dermaModal").style.display = "block"; }
-  function closeModal() { document.getElementById("dermaModal").style.display = "none"; }
+  // Chiusura modale cliccando fuori dal contenuto
   window.onclick = function(event) {
-    if (event.target == document.getElementById("dermaModal")) closeModal();
+    if (event.target.className == 'modal') {
+      event.target.style.display = "none";
+    }
   }
 </script>
 
