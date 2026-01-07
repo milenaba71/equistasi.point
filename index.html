@@ -13,10 +13,14 @@
     
     .app { display: grid; grid-template-columns: 420px 1fr; height: 100vh; }
     
+    /* SIDEBAR */
     .sidebar { background: var(--panel); padding: 20px; border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    
+    /* VIEWER AREA */
     .viewer { position: relative; background: #000; }
     iframe { width: 100%; height: 100%; border: 0; }
 
+    /* UI COMPONENTS */
     .card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 15px; }
     .label { font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; font-weight: bold; letter-spacing: 0.5px; }
     input, select, textarea { 
@@ -24,22 +28,27 @@
       background: rgba(0,0,0,0.3); color: #fff; font-size: 14px; margin-bottom: 10px;
     }
 
+    /* BUTTONS */
     .btn { cursor: pointer; border: 1px solid var(--accent); border-radius: 6px; padding: 12px; font-weight: bold; transition: 0.3s; text-align: center; text-decoration: none; font-size: 12px; }
-    .btn-info { background: rgba(77,163,255,0.1); color: var(--accent); display: block; margin-bottom: 5px; }
-    .btn-search { background: rgba(77,163,255,0.25); color: #fff; border-color: #4da3ff; display: block; }
+    .btn-info { background: rgba(77,163,255,0.1); color: var(--accent); display: block; margin-bottom: 10px; }
     .btn-print { background: var(--accent); color: white; width: 100%; margin-top: 10px; font-size: 14px; }
+    .btn:hover { filter: brightness(1.2); }
 
+    /* LOGO & BRANDING */
     .logo-overlay { position: absolute; top: 15px; right: 20px; z-index: 10; background: white; padding: 6px 12px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
     .logo-overlay img { height: 30px; display: block; }
-    .cover-logo { position: absolute; bottom: 0; left: 0; width: 220px; height: 60px; background: #000; z-index: 5; pointer-events: none; }
+    /* Nasconde loghi BioDigital non desiderati in basso a sinistra */
+    .cover-logo { position: absolute; bottom: 0; left: 0; width: 180px; height: 50px; background: #000; z-index: 5; pointer-events: none; }
 
+    /* MODAL SYSTEM */
     .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow-y: auto; }
     .modal-content { background: #1a222d; margin: 2% auto; padding: 30px; border-radius: 15px; width: 90%; max-width: 1100px; color: #fff; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
     .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
     .derma-img { width: 100%; border-radius: 10px; background: white; margin-top: 20px; padding: 5px; }
 
+    /* PRINT OPTIMIZATION */
     @media print {
-      .modal, .btn, .btn-search, .cover-logo, #mapSelector, .logo-overlay { display: none !important; }
+      .modal, .btn, .cover-logo, #mapSelector, .logo-overlay { display: none !important; }
       .app { display: block !important; height: auto !important; }
       .sidebar { width: 100% !important; background: white !important; color: black !important; padding: 0 !important; border: none !important; }
       .viewer { width: 100% !important; height: 800px !important; page-break-before: always; }
@@ -54,9 +63,9 @@
 <div class="app">
   <aside class="sidebar">
     <h2 style="margin:0 0 5px 0; color: var(--accent);">Equistasi Clinica</h2>
+    <p style="font-size: 12px; color: var(--muted); margin-bottom: 15px;">Integrazione Neuro-Meccanica 3D</p>
     
-    <button class="btn btn-info" onclick="document.getElementById('dermaModal').style.display='block'">📖 MAPPA DERMATOMERI</button>
-    <a href="libreria.html" class="btn btn-search">🔍 CERCA NUOVI MOVIMENTI</a>
+    <button class="btn btn-info" onclick="document.getElementById('dermaModal').style.display='block'">📖 CONSULTA DERMATOMERI</button>
 
     <div class="card">
       <div class="label">Paziente</div>
@@ -64,29 +73,40 @@
       
       <div class="label">Analisi del Movimento</div>
       <select id="mapSelector" onchange="document.getElementById('bioframe').src = this.value">
-        <optgroup label="Selezionati per Te">
+        <optgroup label="Tronco e Addome">
           <option value="https://human.biodigital.com/widget/?be=production/maleAdult/abdominal_anterior_flexion_extension&lang=it">Flessione/Estensione Addome</option>
-          <option value="https://human.biodigital.com/widget/?be=4Oq0&uaid=3Yfre&lang=it">Muscoli della Corsa</option>
+        </optgroup>
+        <optgroup label="Arti Inferiori">
+          <option value="https://human.biodigital.com/widget/?be=4Oq0&uaid=3Yfre&lang=it">Muscoli della Corsa (Bio-Meccanica)</option>
+        </optgroup>
+        <optgroup label="Anatomia Generale">
+          <option value="https://human.biodigital.com/widget/?be=2b5y&uaid=3Yfre&lang=it">Anatomia Totale Muscolare</option>
         </optgroup>
       </select>
     </div>
 
     <div class="card">
       <div class="label">Inquadramento Clinico</div>
-      <input type="text" placeholder="Muscoli Target">
-      <input type="text" placeholder="Dermatomero (es. T10, L5)">
-      <textarea rows="4" placeholder="Note cliniche e obiettivi..."></textarea>
+      <input type="text" placeholder="Muscoli Target (es. Retto Addominale)">
+      <input type="text" placeholder="Dermatomero / Radice (es. T10)">
+      <textarea rows="4" placeholder="Note su dolore, trigger points e posizionamento dispositivi Equistasi..."></textarea>
     </div>
 
     <div class="card">
-      <div class="label">Parametri Equistasi</div>
+      <div class="label">Protocollo Equistasi</div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
-        <div><div class="label">Dispositivi</div><select><option>1</option><option selected>2</option></select></div>
-        <div><div class="label">Durata (min)</div><input type="number" value="2"></div>
+        <div>
+          <div class="label">Dispositivi</div>
+          <select><option>1</option><option selected>2</option><option>3</option></select>
+        </div>
+        <div>
+          <div class="label">Minuti</div>
+          <input type="number" value="2">
+        </div>
       </div>
     </div>
 
-    <button class="btn btn-print" onclick="window.print()">GENERA REPORT PDF</button>
+    <button class="btn btn-print" onclick="window.print()">STAMPA REPORT PDF</button>
   </aside>
 
   <main class="viewer">
@@ -100,14 +120,17 @@
   <div class="modal-content">
     <span class="close" onclick="this.parentElement.parentElement.style.display='none'">&times;</span>
     <h3 style="color: var(--accent); margin-top:0;">Mappa Dermatomeri Sensitivi</h3>
-    <p style="font-size:14px; color:#d1d9e6;">La conoscenza dei dermatomeri consente di modulare con precisione l’attività neuromuscolare.</p>
+    <p style="font-size:14px; color:#d1d9e6;">Utilizza questa mappa per correlare il sintomo del paziente con la radice nervosa da trattare.</p>
     <img src="dermatomeri-sensitivi.png" class="derma-img" alt="Mappa Dermatomeri">
   </div>
 </div>
 
 <script>
+  // Chiusura automatica cliccando fuori dalla modale
   window.onclick = function(event) {
-    if (event.target.className == 'modal') event.target.style.display = "none";
+    if (event.target.className == 'modal') {
+      event.target.style.display = "none";
+    }
   }
 </script>
 
